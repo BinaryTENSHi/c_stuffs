@@ -8,12 +8,12 @@
 #define MUTATION_RATE    0.001
 #define POP_SIZE         100
 
-#define RANDOM_NUM       ((float)rand()/RAND_MAX)
+#define RANDOM_NUM       ((double)rand()/RAND_MAX)
 
 #define GENE_COUNT 16
 
 struct chromo {
-    float fitness;
+    double fitness;
     char genes[GENE_COUNT];
 };
 
@@ -27,6 +27,8 @@ enum operator {
 struct chromo _chromos[POP_SIZE];
 
 int _target;
+int _generation;
+double _max_fitness;
 
 void init_chromos(void);
 
@@ -48,32 +50,44 @@ void crossover(char left[16], char right[16]);
 
 void mutate(char genes[16]);
 
+void print_status();
+
 int main(void) {
     printf("Genetic Calculator\n");
-    _target = 42;
+    _target = 42424242;
+
     printf("Please enter a target number: ");
     scanf("%i", &_target);
-
     getchar();
+
     if (_target == 0)
         return 1;
 
     printf("Entered: %i\n", _target);
-    init_chromos();
+    _generation = 1;
 
-    int generation = 1;
+    init_chromos();
+    print_status();
+
+    clock_t last = clock();
+    clock_t now;
+
     while (true) {
-        ++generation;
+        ++_generation;
         float total_fitness = 0;
 
         for (int i = 0; i < POP_SIZE; ++i) {
             struct chromo *chromo = &_chromos[i];
             eval_chromo(chromo);
 
+            if(chromo->fitness > _max_fitness)
+                _max_fitness = chromo->fitness;
+
             total_fitness += chromo->fitness;
 
             if (chromo->fitness >= 999) {
-                printf("Found solution in generation %i.\n", generation);
+                print_status();
+                printf("\nFound solution in generation %i.\n", _generation);
                 print_chromo(chromo);
                 getchar();
                 return 0;
@@ -102,7 +116,22 @@ int main(void) {
         }
 
         memcpy(_chromos, new_pop, sizeof(_chromos));
+
+        now = clock();
+        clock_t diff = (now - last) / (CLOCKS_PER_SEC / 1000);
+        if (diff > 200) {
+            print_status();
+            last = now;
+        }
     }
+}
+
+void print_status() {
+    system("cls");
+    printf("*-------------------------------------*\n");
+    printf("| Generation : %22i |\n", _generation);
+    printf("| Highest Fitness: %18.5f |\n", _max_fitness);
+    printf("*-------------------------------------*\n");
 }
 
 void mutate(char genes[GENE_COUNT]) {
@@ -175,7 +204,7 @@ void eval_chromo(struct chromo *chromo) {
     if (val == _target) {
         chromo->fitness = 999;
     } else {
-        chromo->fitness = (float) (1.0 / (_target - val));
+        chromo->fitness = 1.0 / (_target - val);
     }
 }
 
