@@ -7,10 +7,8 @@
 #define CROSSOVER_RATE   0.7
 #define MUTATION_RATE    0.001
 #define POP_SIZE         100
-
 #define RANDOM_NUM       ((double)rand()/RAND_MAX)
-
-#define GENE_COUNT 16
+#define GENE_COUNT       16
 
 struct chromo {
     double fitness;
@@ -31,25 +29,15 @@ int _generation;
 double _max_fitness;
 
 void init_chromos(void);
-
 void random_genes(char *arr);
-
 void eval_chromo(struct chromo *chromo);
-
 int calculate_chromo(struct chromo *chromo);
-
-int clean_genes(char in[8], char out[8]);
-
+int clean_genes(char in[GENE_COUNT], char out[GENE_COUNT]);
 void print_chromo(struct chromo *chromo);
-
-void print_genes(char genes[8], int len);
-
-void generation_roulette(int fitness, char out[16]);
-
-void crossover(char left[16], char right[16]);
-
-void mutate(char genes[16]);
-
+void print_genes(char genes[GENE_COUNT], int len);
+void generation_roulette(int fitness, char out[GENE_COUNT]);
+void crossover(char left[GENE_COUNT], char right[GENE_COUNT]);
+void mutate(char genes[GENE_COUNT]);
 void print_status();
 
 int main(void) {
@@ -100,8 +88,8 @@ int main(void) {
             char parent_one[GENE_COUNT];
             char parent_two[GENE_COUNT];
 
-            generation_roulette(total_fitness, parent_one);
-            generation_roulette(total_fitness, parent_two);
+            generation_roulette((int) total_fitness, parent_one);
+            generation_roulette((int) total_fitness, parent_two);
 
             crossover(parent_one, parent_two);
 
@@ -127,7 +115,11 @@ int main(void) {
 }
 
 void print_status() {
+#ifdef _WIN32
     system("cls");
+#else
+    system("clear");
+#endif
     printf("*-------------------------------------*\n");
     printf("| Generation : %22i |\n", _generation);
     printf("| Highest Fitness: %18.5f |\n", _max_fitness);
