@@ -20,7 +20,7 @@ void string_set(void *_self,
 }
 
 char *string_get(const void *_self) {
-  struct String *self = _self;
+  const struct String *self = _self;
   assert(self);
   return self->text;
 }
