@@ -1,5 +1,4 @@
-#ifndef OBJECT_ORIENTED_C_STRING_H
-#define OBJECT_ORIENTED_C_STRING_H
+#pragma once
 
 extern const void *String;
 
@@ -9,5 +8,3 @@ void string_set(void *string,
                 const char *text);
 
 char *string_get(const void *string);
-
-#endif //OBJECT_ORIENTED_C_STRING_H

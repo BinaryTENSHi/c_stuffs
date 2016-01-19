@@ -1,5 +1,4 @@
-#ifndef OBJECT_ORIENTED_C_SET_R
-#define OBJECT_ORIENTED_C_SET_R
+#pragma once
 
 struct Set {
   const void *class;
@@ -11,5 +10,3 @@ struct SetEntry {
   void *element;
   struct SetEntry *next;
 };
-
-#endif //OBJECT_ORIENTED_C_SET_R

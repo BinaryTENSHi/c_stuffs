@@ -1,9 +1,6 @@
-#ifndef OBJECT_ORIENTED_C_STRING_R
-#define OBJECT_ORIENTED_C_STRING_R
+#pragma once
 
 struct String {
   const void *class;
   char *text;
 };
-
-#endif //OBJECT_ORIENTED_C_STRING_R

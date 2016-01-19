@@ -1,5 +1,4 @@
-#ifndef OBJECT_ORIENTED_C_SET_H
-#define OBJECT_ORIENTED_C_SET_H
+#pragma once
 
 extern const void *Set;
 
@@ -21,5 +20,3 @@ int set_apply(const void *set,
               int (*action)(void *object,
                             va_list ap),
               ...);
-
-#endif //OBJECT_ORIENTED_C_SET_H

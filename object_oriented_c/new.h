@@ -1,5 +1,4 @@
-#ifndef OBJECT_ORIENTED_C_NEW_H
-#define OBJECT_ORIENTED_C_NEW_H
+#pragma once
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -15,5 +14,3 @@ int differ(const void *self,
 void *clone(const void *self);
 
 size_t sizeOf(const void *self);
-
-#endif //OBJECT_ORIENTED_C_NEW_H

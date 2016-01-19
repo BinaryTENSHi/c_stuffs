@@ -1,5 +1,4 @@
-#ifndef OBJECT_ORIENTED_C_CLASS_H
-#define OBJECT_ORIENTED_C_CLASS_H
+#pragma once
 
 #include <stddef.h>
 #include <stdarg.h>
@@ -17,5 +16,3 @@ struct Class {
   int (*differ)(const void *self,
                 const void *b);
 };
-
-#endif //OBJECT_ORIENTED_C_CLASS_H

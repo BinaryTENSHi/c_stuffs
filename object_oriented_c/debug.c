@@ -1,6 +1,5 @@
 #include "debug.h"
 
-
 int store(const void *object,
           FILE *fp) {
   return fprintf(fp, "Object @ 0x%p", object);
