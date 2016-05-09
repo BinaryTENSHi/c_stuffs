@@ -35,7 +35,7 @@ int calculate_chromo(struct chromo *chromo);
 int clean_genes(char in[GENE_COUNT], char out[GENE_COUNT]);
 void print_chromo(struct chromo *chromo);
 void print_genes(char genes[GENE_COUNT], int len);
-void generation_roulette(int fitness, char out[GENE_COUNT]);
+void generation_roulette(float fitness, char out[GENE_COUNT]);
 void crossover(char left[GENE_COUNT], char right[GENE_COUNT]);
 void mutate(char genes[GENE_COUNT]);
 void print_status();
@@ -73,7 +73,7 @@ int main(void) {
 
             total_fitness += chromo->fitness;
 
-            if (chromo->fitness >= 999) {
+            if (chromo->fitness >= 2.0) {
                 print_status();
                 printf("\nFound solution in generation %i.\n", _generation);
                 print_chromo(chromo);
@@ -88,8 +88,8 @@ int main(void) {
             char parent_one[GENE_COUNT];
             char parent_two[GENE_COUNT];
 
-            generation_roulette((int) total_fitness, parent_one);
-            generation_roulette((int) total_fitness, parent_two);
+            generation_roulette(total_fitness, parent_one);
+            generation_roulette(total_fitness, parent_two);
 
             crossover(parent_one, parent_two);
 
@@ -137,7 +137,7 @@ void mutate(char genes[GENE_COUNT]) {
     }
 }
 
-void crossover(char left[16], char right[16]) {
+void crossover(char left[GENE_COUNT], char right[GENE_COUNT]) {
     if (RANDOM_NUM < CROSSOVER_RATE) {
         int index = (int) (RANDOM_NUM * GENE_COUNT);
         for (int i = index; i < GENE_COUNT; ++i) {
@@ -148,7 +148,7 @@ void crossover(char left[16], char right[16]) {
     }
 }
 
-void generation_roulette(int total_fitness, char out[GENE_COUNT]) {
+void generation_roulette(float total_fitness, char out[GENE_COUNT]) {
     float slice = (float) (RANDOM_NUM * total_fitness);
     float fitness = 0.0f;
 
@@ -194,7 +194,7 @@ void print_chromo(struct chromo *chromo) {
 void eval_chromo(struct chromo *chromo) {
     int val = calculate_chromo(chromo);
     if (val == _target) {
-        chromo->fitness = 999;
+        chromo->fitness = 2.0;
     } else {
         chromo->fitness = 1.0 / (_target - val);
     }
@@ -239,7 +239,7 @@ int calculate_chromo(struct chromo *chromo) {
     return val;
 }
 
-void print_genes(char genes[8], int len) {
+void print_genes(char genes[GENE_COUNT], int len) {
     for (int i = 0; i < len; ++i) {
         printf("%2i:", genes[i]);
     }
