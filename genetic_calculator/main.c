@@ -76,6 +76,7 @@ int main(void) {
             if (chromo->fitness >= 2.0) {
                 print_status();
                 printf("\nFound solution in generation %i.\n", _generation);
+                printf("%i = ", _target);
                 print_chromo(chromo);
                 getchar();
                 return 0;
@@ -166,7 +167,6 @@ void generation_roulette(float total_fitness, char out[GENE_COUNT]) {
 }
 
 void print_chromo(struct chromo *chromo) {
-    printf("Chromosome ({%.2f}): ", chromo->fitness);
     char cleaned_genes[GENE_COUNT];
     int len = clean_genes(chromo->genes, cleaned_genes);
     for (int i = 0; i < len; ++i) {
