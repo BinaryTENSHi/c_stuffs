@@ -11,6 +11,7 @@
 #define GENE_COUNT       16
 
 struct chromo {
+    int solution;
     double fitness;
     char genes[GENE_COUNT];
 };
@@ -18,8 +19,7 @@ struct chromo {
 enum operator {
     op_plus = 10,
     op_minus = 11,
-    op_mul = 12,
-    op_div = 13
+    op_mul = 12
 };
 
 struct chromo _chromos[POP_SIZE];
@@ -52,7 +52,7 @@ int main(void) {
         return 1;
 
     printf("Entered: %i\n", _target);
-    _generation = 1;
+    _generation = 0;
 
     init_chromos();
     print_status();
@@ -73,7 +73,7 @@ int main(void) {
 
             total_fitness += chromo->fitness;
 
-            if (chromo->fitness >= 2.0) {
+            if (chromo->solution == 1) {
                 print_status();
                 printf("\nFound solution in generation %i.\n", _generation);
                 printf("%i = ", _target);
@@ -98,9 +98,11 @@ int main(void) {
             mutate(parent_two);
 
             new_pop[j].fitness = 0;
+            new_pop[j].solution = 0;
             memcpy(new_pop[j++].genes, parent_one, sizeof(parent_one));
 
             new_pop[j].fitness = 0;
+            new_pop[j].solution = 0;
             memcpy(new_pop[j++].genes, parent_two, sizeof(parent_two));
         }
 
@@ -181,9 +183,6 @@ void print_chromo(struct chromo *chromo) {
             case op_mul:
                 bit = '*';
                 break;
-            case op_div:
-                bit = '+';
-                break;
             default:
                 bit = (char) (48 + bit);
         }
@@ -194,7 +193,7 @@ void print_chromo(struct chromo *chromo) {
 void eval_chromo(struct chromo *chromo) {
     int val = calculate_chromo(chromo);
     if (val == _target) {
-        chromo->fitness = 2.0;
+        chromo->solution = 1;
     } else {
         chromo->fitness = 1.0 / (_target - val);
     }
@@ -221,15 +220,6 @@ int calculate_chromo(struct chromo *chromo) {
                 case op_mul:
                     val *= cleaned_genes[++i];
                     break;
-                case op_div: {
-                    char d = cleaned_genes[++i];
-                    if (d == 0) {
-                        val += d;
-                    } else {
-                        val /= d;
-                    }
-                    break;
-                }
                 default:
                     printf("uwot");
             }
@@ -253,7 +243,7 @@ int clean_genes(char in[GENE_COUNT], char out[GENE_COUNT]) {
         char gene = in[i];
 
         if (req_operator) {
-            if (gene > 9 && gene < 14) {
+            if (gene >= op_plus && gene <= op_mul) {
                 out[last++] = gene;
                 req_operator = false;
             }
@@ -278,6 +268,7 @@ void init_chromos(void) {
     srand((unsigned int) time(NULL));
     for (int i = 0; i < POP_SIZE; ++i) {
         _chromos[i].fitness = 0.0;
+        _chromos[i].solution = 0;
         random_genes(_chromos[i].genes);
     }
 }
